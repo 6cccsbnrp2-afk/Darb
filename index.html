@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>درب | استكشف لبنان</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#173F35">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="درب">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cedar:#173F35;
+    --cedar-deep:#0E2921;
+    --sand:#EFE6D2;
+    --sand-dark:#E1D3B2;
+    --sea:#0F6E8C;
+    --pomegranate:#C1440E;
+    --pomegranate-soft:#E2CBB8;
+    --ink:#1F2421;
+    --ink-soft:#5B6660;
+    --white:#FFFDF8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Tajawal', sans-serif;
+    background: #0B1512;
+    display:flex;
+    justify-content:center;
+    padding:28px 12px;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .frame{
+    width:390px;
+    max-width:100%;
+    background:var(--sand);
+    border-radius:38px;
+    overflow:hidden;
+    box-shadow:0 30px 70px rgba(0,0,0,.55), 0 0 0 8px #05100C, 0 0 0 9px #2b3a35;
+    position:relative;
+  }
+  .status{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 24px 4px; font-size:12px; font-weight:700; color:var(--cedar-deep);
+  }
+  .screen{ height:780px; overflow-y:auto; scrollbar-width:none; }
+  .screen::-webkit-scrollbar{display:none;}
+
+  .topbar{
+    padding:10px 20px 16px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{ display:flex; align-items:center; gap:8px; }
+  .brand svg{ width:26px; height:26px; }
+  .brand span{
+    font-family:'Aref Ruqaa', serif; font-weight:700; font-size:24px; color:var(--cedar-deep);
+  }
+  .bell{
+    width:38px; height:38px; border-radius:50%; background:var(--white);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 2px 6px rgba(23,63,53,.12);
+  }
+
+  .hero{
+    margin:4px 20px 18px;
+    background:linear-gradient(135deg, var(--cedar) 0%, var(--cedar-deep) 100%);
+    border-radius:20px;
+    padding:20px 20px 22px;
+    color:var(--sand);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; left:-30px; bottom:-40px; width:150px; height:150px;
+    background:radial-gradient(circle, rgba(193,68,14,.35), transparent 70%);
+  }
+  .hero h1{ font-size:19px; font-weight:700; line-height:1.5; position:relative; z-index:1;}
+  .hero p{ font-size:12.5px; opacity:.75; margin-top:6px; position:relative; z-index:1;}
+  .search{
+    margin-top:14px; background:var(--sand); border-radius:14px;
+    padding:12px 14px; display:flex; align-items:center; gap:8px;
+    position:relative; z-index:1;
+  }
+  .search input{
+    border:none; background:none; outline:none; font-family:inherit;
+    font-size:13.5px; flex:1; color:var(--ink); text-align:right;
+  }
+  .search input::placeholder{ color:var(--ink-soft); }
+
+  .chips{
+    display:flex; gap:10px; padding:0 20px 20px; overflow-x:auto; scrollbar-width:none;
+  }
+  .chips::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto; padding:9px 16px; border-radius:999px; font-size:13px; font-weight:700;
+    white-space:nowrap; cursor:pointer; transition:.15s;
+    background:var(--white); color:var(--cedar-deep); border:1.5px solid var(--sand-dark);
+  }
+  .chip.active{ background:var(--pomegranate); color:var(--white); border-color:var(--pomegranate); }
+
+  .section{ padding:6px 20px 22px; }
+  .section-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px; }
+  .section-head h2{ font-size:16px; font-weight:900; color:var(--cedar-deep); }
+  .section-head a{ font-size:11.5px; color:var(--sea); font-weight:700; text-decoration:none; }
+
+  .trail{ position:relative; display:flex; gap:0; overflow-x:auto; padding:6px 4px 14px; scrollbar-width:none; }
+  .trail::-webkit-scrollbar{display:none;}
+  .trail::before{
+    content:""; position:absolute; top:52px; left:20px; right:20px; height:2px;
+    background-image:linear-gradient(to left, var(--pomegranate) 55%, transparent 45%);
+    background-size:10px 2px; z-index:0;
+  }
+  .stop{ flex:0 0 auto; width:118px; text-align:center; position:relative; z-index:1; padding:0 8px; }
+  .stop .dot{
+    width:56px; height:56px; border-radius:50%; margin:0 auto 8px;
+    display:flex; align-items:center; justify-content:center; font-size:24px;
+    background:var(--white); border:2.5px solid var(--pomegranate); box-shadow:0 4px 10px rgba(23,63,53,.15);
+  }
+  .stop b{ display:block; font-size:12px; color:var(--ink); font-weight:700; }
+  .stop span{ font-size:10.5px; color:var(--ink-soft); }
+
+  .card{
+    background:var(--white); border-radius:18px; overflow:hidden; margin-bottom:14px;
+    box-shadow:0 4px 14px rgba(23,63,53,.08);
+    display:flex; gap:0;
+  }
+  .card .thumb{
+    width:104px; flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-size:30px;
+  }
+  .thumb.g1{ background:linear-gradient(160deg,#1B4332,#0F6E8C); }
+  .thumb.g2{ background:linear-gradient(160deg,#C1440E,#7A2A0E); }
+  .thumb.g3{ background:linear-gradient(160deg,#0F6E8C,#173F35); }
+  .thumb.g4{ background:linear-gradient(160deg,#8A6D3B,#4C3A1E); }
+  .card .info{ padding:12px 14px; flex:1; }
+  .card .info .row1{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .card .info h3{ font-size:14px; font-weight:700; color:var(--ink); }
+  .tag{ font-size:10px; background:var(--pomegranate-soft); color:var(--pomegranate); padding:2px 8px; border-radius:8px; font-weight:700;}
+  .card .info p{ font-size:11.5px; color:var(--ink-soft); margin-top:4px; line-height:1.5; }
+  .meta{ display:flex; gap:10px; margin-top:8px; font-size:11px; color:var(--cedar-deep); font-weight:700; }
+  .meta span{ display:flex; align-items:center; gap:3px; }
+
+  .ad{
+    border:1.5px dashed var(--sea); background:#E7F1F4; border-radius:16px;
+    padding:14px; margin-bottom:16px; display:flex; gap:12px; align-items:center;
+  }
+  .ad .adthumb{
+    width:56px; height:56px; border-radius:12px; background:linear-gradient(160deg,#0F6E8C,#0a4a5f);
+    display:flex; align-items:center; justify-content:center; font-size:22px; flex:0 0 auto;
+  }
+  .ad .adbody{ flex:1; }
+  .ad .adlabel{ font-size:9.5px; font-weight:900; color:var(--sea); letter-spacing:.5px; }
+  .ad .adtitle{ font-size:12.5px; font-weight:700; color:var(--ink); margin-top:2px; }
+  .ad .adsub{ font-size:10.5px; color:var(--ink-soft); margin-top:1px; }
+  .ad button{
+    font-size:11px; font-weight:700; background:var(--sea); color:white; border:none;
+    padding:7px 12px; border-radius:9px; font-family:inherit; cursor:pointer;
+  }
+
+  .banner{
+    margin:0 20px 14px; height:64px; border-radius:14px; border:1.5px dashed var(--sand-dark);
+    background:repeating-linear-gradient(135deg, #F6F0E1, #F6F0E1 10px, #EFE6D2 10px, #EFE6D2 20px);
+    display:flex; align-items:center; justify-content:center; gap:8px; color:var(--ink-soft); font-size:11px; font-weight:700;
+  }
+
+  .bottomnav{
+    position:sticky; bottom:0; background:var(--white); border-top:1px solid var(--sand-dark);
+    display:flex; justify-content:space-around; padding:10px 6px 14px;
+  }
+  .navitem{ display:flex; flex-direction:column; align-items:center; gap:3px; font-size:9.5px; color:var(--ink-soft); font-weight:700; }
+  .navitem.active{ color:var(--pomegranate); }
+  .navitem svg{ width:20px; height:20px; }
+
+  .note{
+    max-width:390px; margin:16px auto 0; color:#B7C4BE; font-size:12px; text-align:center; line-height:1.7;
+  }
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <div class="status">
+    <span>9:41</span>
+    <span>🔋 📶 📡</span>
+  </div>
+
+  <div class="screen" id="screen">
+
+    <div class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C9 7 6 9 6 13a6 6 0 0012 0c0-4-3-6-6-11z" fill="#C1440E"/></svg>
+        <span>درب</span>
+      </div>
+      <div class="bell">🔔</div>
+    </div>
+
+    <div class="hero">
+      <h1>وين بدك يوخدك لبنان اليوم؟</h1>
+      <p>من الساحل للجبل، رتّبنالك الدرب</p>
+      <div class="search">
+        <span>🔍</span>
+        <input placeholder="دوّر عمكان، مطعم، أو فعالية...">
+      </div>
+    </div>
+
+    <div class="chips">
+      <div class="chip active">أماكن سياحية</div>
+      <div class="chip">مطاعم</div>
+      <div class="chip">فنادق</div>
+      <div class="chip">فعاليات</div>
+      <div class="chip">شواطئ</div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><h2>الدرب المقترح اليوم</h2><a>عرض الكل ‹</a></div>
+      <div class="trail">
+        <div class="stop"><div class="dot">🏛️</div><b>جبيل</b><span>أثري</span></div>
+        <div class="stop"><div class="dot">🌊</div><b>روشة</b><span>بيروت</span></div>
+        <div class="stop"><div class="dot">⛰️</div><b>الأرز</b><span>جبلي</span></div>
+        <div class="stop"><div class="dot">🕯️</div><b>جعيتا</b><span>مغارة</span></div>
+      </div>
+    </div>
+
+    <div class="section" style="padding-top:0">
+      <div class="section-head"><h2>الأكثر زيارة قريباً منك</h2><a>الخريطة ‹</a></div>
+
+      <div class="card">
+        <div class="thumb g1">🏛️</div>
+        <div class="info">
+          <div class="row1"><h3>قلعة جبيل الصليبية</h3><span class="tag">أثري</span></div>
+          <p>قلعة من القرن ١٢ مطلة على أقدم مرفأ مأهول بالعالم</p>
+          <div class="meta"><span>⭐ 4.7</span><span>📍 2.3 كم</span><span>🎟️ مجاني</span></div>
+        </div>
+      </div>
+
+      <div class="ad">
+        <div class="adthumb">🚗</div>
+        <div class="adbody">
+          <div class="adlabel">إعلان</div>
+          <div class="adtitle">أجّر سيارتك بالساعة من مطار بيروت</div>
+          <div class="adsub">أسعار تبلش من ١٥$ باليوم</div>
+        </div>
+        <button>احجز</button>
+      </div>
+
+      <div class="card">
+        <div class="thumb g3">🌊</div>
+        <div class="info">
+          <div class="row1"><h3>صخرة الروشة</h3><span class="tag">معلم</span></div>
+          <p>أشهر معلم طبيعي ببيروت، بيحلى المشي حواليه وقت الغروب</p>
+          <div class="meta"><span>⭐ 4.8</span><span>📍 6.1 كم</span><span>🎟️ مجاني</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="thumb g4">🍽️</div>
+        <div class="info">
+          <div class="row1"><h3>مطعم الميناء</h3><span class="tag">مأكولات بحرية</span></div>
+          <p>أطباق بحرية طازة عالبحر مباشرة، بجوّ شعبي أصيل</p>
+          <div class="meta"><span>⭐ 4.5</span><span>📍 1.8 كم</span><span>💰 $$</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="thumb g2">⛰️</div>
+        <div class="info">
+          <div class="row1"><h3>غابة أرز الرب</h3><span class="tag">طبيعة</span></div>
+          <p>أرز عمرو آلاف السنين، محمية طبيعية ومسارات مشي</p>
+          <div class="meta"><span>⭐ 4.9</span><span>📍 92 كم</span><span>🎟️ 5$</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="banner">📢 مساحة إعلانية — بانر 320×64</div>
+
+    <div style="height:8px"></div>
+  </div>
+
+  <div class="bottomnav">
+    <div class="navitem active"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3z"/></svg>الرئيسية</div>
+    <div class="navitem"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"/><line x1="21" y1="21" x2="16.5" y2="16.5" stroke="currentColor" stroke-width="2"/></svg>استكشف</div>
+    <div class="navitem"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="5" width="16" height="15" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><line x1="4" y1="9" x2="20" y2="9" stroke="currentColor" stroke-width="2"/></svg>الفعاليات</div>
+    <div class="navitem"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.6-9.5-9C.7 8.4 2.6 5 6 5c2 0 3.3 1 4 2 0.7-1 2-2 4-2 3.4 0 5.3 3.4 3.5 7-2.5 4.4-9.5 9-9.5 9z"/></svg>المفضلة</div>
+    <div class="navitem"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2" fill="none"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>حسابي</div>
+  </div>
+</div>
+
+<div class="note">نموذج تفاعلي (Prototype) — الصور استعيضت برموز وتدرجات ألوان لحد ما نحدد هوية بصرية نهائية</div>
+
+<script>
+document.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+  });
+});
+document.querySelectorAll('.navitem').forEach(item=>{
+  item.addEventListener('click',()=>{
+    document.querySelectorAll('.navitem').forEach(c=>c.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+
+</body>
+</html>
