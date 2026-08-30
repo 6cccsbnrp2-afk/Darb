@@ -27,29 +27,31 @@
     --white:#FFFDF8;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
+  html, body{ height:100%; }
   body{
     font-family:'Tajawal', sans-serif;
-    background: #0B1512;
-    display:flex;
-    justify-content:center;
-    padding:28px 12px;
+    background: var(--sand);
     color:var(--ink);
     -webkit-font-smoothing:antialiased;
+    overscroll-behavior:none;
   }
   .frame{
-    width:390px;
-    max-width:100%;
     background:var(--sand);
-    border-radius:38px;
-    overflow:hidden;
-    box-shadow:0 30px 70px rgba(0,0,0,.55), 0 0 0 8px #05100C, 0 0 0 9px #2b3a35;
     position:relative;
+    height:100vh;
+    height:100dvh;
+    display:flex;
+    flex-direction:column;
   }
-  .status{
-    display:flex; justify-content:space-between; align-items:center;
-    padding:14px 24px 4px; font-size:12px; font-weight:700; color:var(--cedar-deep);
+  .status{ display:none; }
+  .screen{
+    flex:1 1 auto;
+    min-height:0;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding-top:env(safe-area-inset-top);
   }
-  .screen{ height:780px; overflow-y:auto; scrollbar-width:none; }
   .screen::-webkit-scrollbar{display:none;}
 
   .topbar{
@@ -170,16 +172,14 @@
   }
 
   .bottomnav{
-    position:sticky; bottom:0; background:var(--white); border-top:1px solid var(--sand-dark);
-    display:flex; justify-content:space-around; padding:10px 6px 14px;
+    flex:0 0 auto;
+    background:var(--white); border-top:1px solid var(--sand-dark);
+    display:flex; justify-content:space-around;
+    padding:10px 6px calc(10px + env(safe-area-inset-bottom));
   }
   .navitem{ display:flex; flex-direction:column; align-items:center; gap:3px; font-size:9.5px; color:var(--ink-soft); font-weight:700; }
   .navitem.active{ color:var(--pomegranate); }
   .navitem svg{ width:20px; height:20px; }
-
-  .note{
-    max-width:390px; margin:16px auto 0; color:#B7C4BE; font-size:12px; text-align:center; line-height:1.7;
-  }
 </style>
 </head>
 <body>
@@ -194,7 +194,10 @@
 
     <div class="topbar">
       <div class="brand">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C9 7 6 9 6 13a6 6 0 0012 0c0-4-3-6-6-11z" fill="#C1440E"/></svg>
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="11.1" y="18" width="1.8" height="3" fill="#C1440E"/>
+          <path d="M12 3l3.6 5.5h-2.3L17 13h-2.6l3.4 5H6.2l3.4-5H7l3.7-4.5H8.4L12 3z" fill="#C1440E"/>
+        </svg>
         <span>درب</span>
       </div>
       <div class="bell">🔔</div>
@@ -290,8 +293,6 @@
     <div class="navitem"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2" fill="none"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>حسابي</div>
   </div>
 </div>
-
-<div class="note">نموذج تفاعلي (Prototype) — الصور استعيضت برموز وتدرجات ألوان لحد ما نحدد هوية بصرية نهائية</div>
 
 <script>
 document.querySelectorAll('.chip').forEach(chip=>{
